@@ -1,0 +1,14 @@
+<launch>
+  <!-- Gazebo World -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find gazebo_world)/world/data.world"/>
+  </include>
+
+  <!-- Robot model -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find gazebo_model)/urdf/transform.urdf.xacro"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtle_burger -x -2 -y -0.5 -z 0 -param robot_description" />
+
+  <!-- Keyboard controller in sdv_agv package -->
+  <param name="model_teleop" value="$(env TURTLEBOT3_MODEL)"/>
+  <node pkg="sdv_agv" type="agv_teleop" name="agv_teleop_keyboard" output="screen"/>
+</launch>

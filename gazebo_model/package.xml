@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>gazebo_model</name>
+  <version>1.0.0</version>
+  <description>The gazebo_model package</description>
+  <maintainer email="crypps1412@todo.todo">crypps1412</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>gazebo_ros</depend>
+</package>

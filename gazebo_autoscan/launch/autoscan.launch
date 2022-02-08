@@ -1,0 +1,29 @@
+<launch>
+  <!-- Simulation world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find gazebo_world)/world/data.world"/>
+  </include>
+
+  <!-- Robot model -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find gazebo_model)/urdf/transform.urdf.xacro"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtle_burger -x -2 -y -0.5 -z 0 -param robot_description" />
+
+  <!-- SLAM -->
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping">
+    <param name="base_frame" value="base_footprint"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_frame"  value="map"/>
+    <rosparam command="load" file="$(find gazebo_slam)/param/gmapping.yaml" />
+  </node>
+
+  <!-- Rviz simulation -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find gazebo_slam)/rviz/gmapping.rviz"/>
+
+  <!-- Autoscan -->
+  <param name="cmd_vel_topic_name" value="/cmd_vel"/>
+  <node name="autoscan" pkg="gazebo_autoscan" type="autoscan" required="true"/>
+</launch>
